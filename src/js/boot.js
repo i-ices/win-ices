@@ -46,38 +46,31 @@ function boot() {
         // 播放视频
         document.querySelector(".boot-animation").style.display = "flex";
         document.getElementById("startupAudio").play();
+
         // 播放视频后删除视频div
         document.getElementById("startupAudio").addEventListener("ended", event => {
-            document.querySelector(".boot-animation").remove()
+            document.querySelector(".boot-animation").remove();
+            passwordPhase();
         })
 
-        passwordPhase();
         // 现在显示桌面
+        document.body.style.background = "url(src/wallpaper/img18.webp) center center/cover no-repeat";
         document.querySelector(".desktop").style.display = "block";
         document.querySelector(".taskbar").style.display = "grid";
         document.querySelector(".start").style.display = "block";
-        document.body.style.background = "#fff url(src/wallpaper/img18.webp) center center/cover no-repeat";
     }, 3000)
 }
 
 // 如果用户单击或按下键盘上的任何键，锁屏应消失，密码屏应出现
 function passwordPhase() {
     if (firstBoot) {
-        setTimeout(notify, 1e3, "src/icons/settings.svg", "设置", "Welcome to Windows 11!", "Congratulations You have successfully Booted Windows 11")
-        setTimeout(_ => {
-            // 通知firefox使用以启用背景过滤器标志
-            if (window.navigator.userAgent.indexOf("Firefox") > -1) {
-                if (CSS.supports("(backdrop-filter:blur(20px))") != true) {
-                    notify("src/icons/settings.svg", "设置", "Hello Firefox User", "要获得完整的UI体验，请访问 \"<span style=user-select:all>about:config</span>\" and search for \"layout.css.backdrop-filter.enabled\" and set it to \"true\"")
-                }
-            }
-        }, 2e3)
-        setTimeout(notify, 10e3, "src/icons/edge.svg", "Microsoft Edge", "“所有新浏览器都在这里”，“您的Edge浏览器已为Windows 11更新\n请试用。")
+        setTimeout(notify, 1e3, "src/icons/settings.svg", "设置", "欢迎使用win-ices", "恭喜您已成功启动win-ices")
+        setTimeout(notify, 10e3, "src/icons/edge.svg", "Microsoft Edge", "所有新浏览器都在这里", "您的Edge浏览器已为win-ices更新\n请试用。")
         startTutorials();
         setCookie("firstBoot", "0");
     }
     if (getCookie("cookiesAccepted") == "") {
-        notify("src/icons/settings.svg", "Settings", "Windows 11使用Cookie", "为了改善用户体验，此Windows 11使用Cookie", "接受", `setCookie('cookiesAccepted','1');notificationClose('#n${nId}')`);
+        notify("src/icons/settings.svg", "设置", "Windows 11使用Cookie", "为了改善用户体验，此Windows 11使用Cookie", "接受", `setCookie('cookiesAccepted','1');notificationClose('#n${nId}')`);
     }
 }
 
@@ -91,4 +84,15 @@ function fullScreen() {
     } else if (elem.msRequestFullscreen) { /* IE11 */
         elem.msRequestFullscreen();
     }
+}
+
+{
+    console.log('%c win-ices', 'background: #222; color: #bada55', 'https://ices.fun');
+    console.log('%c \n            _             _               \n' +
+        '           (_)           (_)              \n' +
+        '  __      ___ _ __ ______ _  ___ ___  ___ \n' +
+        '  \\ \\ /\\ / / | \'_ \\______| |/ __/ _ \\/ __|\n' +
+        '   \\ V  V /| | | | |     | | (_|  __/\\__ \\\n' +
+        '    \\_/\\_/ |_|_| |_|     |_|\\___\\___||___/\n' +
+        '  \n', 'color: #ff00ff;font-weight: 900;')
 }

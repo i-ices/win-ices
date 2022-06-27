@@ -59,7 +59,7 @@
 }
 
 body {
-    transition: background-image 2s linear 0s;
+    /*transition: background-image 2s linear 0s;*/
 }
 
 .start figure,img {

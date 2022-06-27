@@ -79,12 +79,12 @@ class Window {
             //将iframe的高度设置为
             //iframe内容的高度
             console.log(frame.contentWindow.document.querySelector(".container"));
-            frame.style.height = frame.contentWindow.document.querySelector(".container").getBoundingClientRect().height + "px";
+            // frame.style.height = frame.contentWindow.document.querySelector(".container").getBoundingClientRect().height + "px";
 
             //将iframe的宽度设置为
             //iframe内容的宽度
             console.log(frame.contentWindow.document.querySelector(".container").getBoundingClientRect());
-            frame.style.width = frame.contentWindow.document.querySelector(".container").getBoundingClientRect().width + "px";
+            // frame.style.width = frame.contentWindow.document.querySelector(".container").getBoundingClientRect().width + "px";
             // 在iframe内单击ok按钮隐藏窗口
             if (frame.contentWindow.document.title == "winver") {
                 frame.contentWindow.document.querySelector(".ok").addEventListener("click", event => {

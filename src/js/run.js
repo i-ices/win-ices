@@ -7,7 +7,7 @@ let allSchemes = ["min", "max", "cross"];
 
 function executeProgram(programName) {
     let app = apps[programName];
-    let options = app.titleBarScheme == undefined ? allSchemes : app.titleBarScheme;
+    let options = app.titleBarScheme ?? allSchemes;
     let win1 = new Window(app.name, "black", "white", app.icon, app.src, options);
     win1.createWindow();
 }

@@ -67,7 +67,7 @@ window.oncontextmenu = (e) => {
 let wi = 0;
 const wIds = [18, 28, 29, 30, 31, 32, 33, 34, 35]; //这些墙纸适合浅色主题
 function changeWallpaper() {
-    wi > 10 ? wi = 0 : wi += 1;
+    wi >= 8 ? wi = 0 : wi++;
     document.body.style.backgroundImage = `url(src/wallpaper/img${wIds[wi]}.webp)`;
 }
 setInterval(() => {

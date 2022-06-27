@@ -5,7 +5,7 @@ document.addEventListener("click", (e) => {
         document.querySelector(".start").classList.remove("show-start");
     }
 
-    if (e.target.offsetParent != document.querySelector(".action-center")) {
+    if (e.target.offsetParent != document.querySelector(".action-center") && !acTNotCompleted) {
         if (e.target != document.querySelector('#wifi') && e.target != document.querySelector("body > div.taskbar > div.right > div.action-center-button > img:nth-child(3)") && e.target != document.querySelector("body > div.taskbar > div.right > div.action-center-button > img:nth-child(4)")) {
             if (!document.getElementById('acCheck').checked) {
                 document.querySelector("#acCheck").click();

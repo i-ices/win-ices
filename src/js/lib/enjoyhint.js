@@ -211,7 +211,7 @@
             var $skipBtn = $(".enjoyhint_skip_btn");
   
             $skipBtn.addClass(step_data.skipButton.className || "");
-            $skipBtn.text(step_data.skipButton.text || "Skip");
+            $skipBtn.text(step_data.skipButton.text || "跳过");
             that.skipUserClass = step_data.skipButton.className;
           }
   
@@ -618,7 +618,7 @@
 
         that.$skip_btn = $("<div>", { class: that.cl.skip_btn })
           .appendTo(that.enjoyhint)
-          .html("Skip")
+          .html("跳过")
           .click(function(e) {
             that.hide();
             that.options.onSkipClick();

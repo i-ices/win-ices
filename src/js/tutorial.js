@@ -41,7 +41,7 @@ function startTutorials() {
             resourceReady = true
             clearInterval(interval);
         }
-    }, 2e3);
+    }, 50);
 }
 
 /**
@@ -75,7 +75,7 @@ function initialTutorial() {
     }
 }
 
-let acTNotCompleted = keyNotCompleted = true;
+let acTNotCompleted = keyNotCompleted = firstBoot;
 
 document.querySelector('.action-center-button').onclick = _ => {
     document.querySelector('#acCheck').click();

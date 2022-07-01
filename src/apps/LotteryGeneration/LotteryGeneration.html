@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="LotteryGeneration.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/html2canvas/1.4.1/html2canvas.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jsbarcode/3.5.5/JsBarcode.all.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/qrcodejs/1.0.0/qrcode.js"></script>
+    <title>彩票生成</title>
+</head>
+<body>
+<div class="container pb-5">
+    <header class="row m-3 p-1">
+        <div class="title col-sm-12 d-flex align-items-center">
+            <img src="../../icons/logo.png" alt="">
+            <h1>3D福彩生成卡</h1>
+        </div>
+        <p class="col-md-12 mt-2 ml-4">打印一张带有彩票详细信息的鉴权卡片，通过内置独特加密方法，确保文件信息安全且有效</p>
+    </header>
+    <div class="main row m-3 p-1 justify-content-around">
+        <div class="title mt-3 col-sm-12 d-flex align-items-center">
+            <img src="../../icons/logo.png" alt="">
+            <h2>3D彩卡</h2>
+        </div>
+
+        <div class="form p-3 d-flex flex-wrap-reverse justify-content-around align-items-center">
+            <div class="input m-4 flex-fill" id="i-input">
+                <label>
+                    <h4>彩票号码</h4>
+                    <div v-for="item,index in lotteryNumber">
+                        <input class="mt-1" type="number" max="1000" min="100" placeholder="请输入购买的彩票号码"
+                               v-model="lotteryNumber[index]">
+                        <svg v-if="index === lotteryNumber.length - 1" @click="addLotteryNumber(lotteryNumber[index])"
+                             t="1656603866708"
+                             class="icon mt-1" viewBox="0 0 1024 1024"
+                             version="1.1"
+                             xmlns="http://www.w3.org/2000/svg" p-id="2248" width="48" height="48">
+                            <path d="M925.696 384q19.456 0 37.376 7.68t30.72 20.48 20.48 30.72 7.68 37.376q0 20.48-7.68 37.888t-20.48 30.208-30.72 20.48-37.376 7.68l-287.744 0 0 287.744q0 20.48-7.68 37.888t-20.48 30.208-30.72 20.48-37.376 7.68q-20.48 0-37.888-7.68t-30.208-20.48-20.48-30.208-7.68-37.888l0-287.744-287.744 0q-20.48 0-37.888-7.68t-30.208-20.48-20.48-30.208-7.68-37.888q0-19.456 7.68-37.376t20.48-30.72 30.208-20.48 37.888-7.68l287.744 0 0-287.744q0-19.456 7.68-37.376t20.48-30.72 30.208-20.48 37.888-7.68q39.936 0 68.096 28.16t28.16 68.096l0 287.744 287.744 0z"
+                                  p-id="2249" fill="#57AB6B"></path>
+                        </svg>
+                        <svg v-else @click="reducedLotteryNumber(index)" t="1656685637871" class="icon mt-1"
+                             viewBox="0 0 1024 1024" version="1.1"
+                             xmlns="http://www.w3.org/2000/svg" p-id="2262" width="48" height="48">
+                            <path d="M587.229378 437.990403 580.722174 437.990403 76.975139 437.990403 76.975139 581.918419 580.722174 581.918419 587.229378 581.918419 940.542216 581.918419 940.542216 437.990403Z"
+                                  p-id="2263" fill="#57AB6B"></path>
+                        </svg>
+                    </div>
+                </label>
+                <label>
+                    <h4>注数</h4>
+                    <input type="number" max="100" min="1" placeholder="0" v-model="noteNumber">
+                </label>
+                <label>
+                    <h4>类型</h4>
+                    <select v-model="type">
+                        <option value="组选六">组选六</option>
+                        <option value="组选三">组选三</option>
+                        <option value="单选">单选</option>
+                    </select>
+                </label>
+            </div>
+        </div>
+    </div>
+    <main class="row m-3 p-1 justify-content-around">
+        <div class="title mt-3 col-sm-12 d-flex align-items-center">
+            <img src="../../icons/logo.png" alt="">
+            <h2>3D彩卡</h2>
+        </div>
+
+        <div class="form p-3 d-flex flex-wrap-reverse justify-content-around align-items-center">
+            <canvas id="barcode" class="col-12"></canvas>
+            <div class="col-12 m-3 p-2 text-center text-uppercase uniqueCode"></div>
+            <div id="qrcode" class="mt-3 mr-4 ml-4 mb-1 flex-fill"></div>
+            <div class="input mt-3 mr-4 ml-4 mb-1 flex-fill" id="app">
+                <label>
+                    <h4><b>彩票号码</b></h4>
+                    <span>{{lotteryNumber}}</span>
+                </label>
+                <label>
+                    <h4><b>注数</b></h4>
+                    <span>{{noteNumber}}</span>
+                </label>
+                <label>
+                    <h4><b>类型</b></h4>
+                    <span>{{type}}</span>
+                </label>
+                <label>
+                    <h4><b>日期</b></h4>
+                    <span>{{date}}</span>
+                </label>
+            </div>
+        </div>
+    </main>
+    <div class="row justify-content-center">
+        <button type="button" id="create" class="btn btn-outline-success w-75">生成</button>
+    </div>
+</div>
+</body>
+<script type="text/javascript" defer>
+    const qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: "https://ices.fun/",
+        width: 256, // 图片宽度
+        height: 256, // 图片高度
+        colorDark: "rgb(87,172,107)", // 二维码颜色
+        colorLight: "#ffffff", // 二维码背景颜色
+        correctLevel: QRCode.CorrectLevel.L // 模糊识别等级
+    });
+    // 生成条形码
+    JsBarcode('#barcode', `${Date.now()}`, {
+        format: "CODE39",//选择要使用的条形码类型
+        width: 3,//设置条之间的宽度
+        height: 50,//高度
+        displayValue: true,//是否在条形码下方显示文字
+        text: "Ices",//覆盖显示的文本
+        fontOptions: "bold italic",//使文字加粗体或变斜体
+        font: "fantasy",//设置文本的字体
+        textAlign: "right",//设置文本的水平对齐方式
+        textPosition: "top",//设置文本的垂直位置
+        textMargin: 5,//设置条形码和文本之间的间距
+        fontSize: 15,//设置文本的大小
+        background: "rgb(87,172,107)",//设置条形码的背景
+        lineColor: "rgb(250,250,250)",//设置条和文本的颜色。
+        margin: 15//设置条形码周围的空白边距
+    })
+
+    function UUID() {
+        let str = '0123456789abcdef'
+        let arr = []
+        for (let i = 0; i < 36; i++) {
+            arr.push(str.substr(Math.floor(Math.random() * 0x10), 1))
+        }
+        arr[14] = 4;
+        arr[19] = str.substr(arr[19] & 0x3 | 0x8, 1)
+        arr[8] = arr[13] = arr[18] = arr[23] = '-'
+        return arr.join('')
+    }
+
+    document.querySelector('.uniqueCode').innerText = ` ${UUID()}-${UUID()}`;
+
+    const input = new Vue({
+        el: '#i-input',
+        data() {
+            return {
+                lotteryNumber: [null],
+                noteNumber: 1,
+                type: '组选六',
+            }
+        },
+        methods: {
+            addLotteryNumber(item) {
+                if (!item) {
+                    return;
+                }
+                this.lotteryNumber.push(null);
+            },
+
+            reducedLotteryNumber(index) {
+                this.lotteryNumber.splice(index, 1);
+            },
+        }
+    })
+
+    let app;
+    document.querySelector('#create').addEventListener('click', function () {
+        if (input.lotteryNumber.length === 1) {
+            if (!input.lotteryNumber[0]) {
+                return;
+            }
+        }
+        if (!input.noteNumber || !input.type) {
+            return;
+        }
+        if (!app) {
+            app = new Vue({
+                el: '#app',
+                data() {
+                    return {
+                        lotteryNumber: input.lotteryNumber,
+                        noteNumber: input.noteNumber,
+                        type: input.type,
+                        date: new Date().toLocaleDateString(),
+                        code: UUID(),
+                    }
+                }
+            });
+        } else {
+            app.lotteryNumber = input.lotteryNumber;
+            app.noteNumber = input.noteNumber;
+            app.type = input.type;
+            app.date = new Date().toLocaleDateString();
+            app.code = UUID();
+        }
+
+        qrcode.clear();
+        qrcode.makeCode(JSON.stringify(app._data)); // 生成另一个码.
+
+        setTimeout(function () {
+            html2canvas(document.querySelector('main'), {
+                allowTaint: true // 允许加载跨域资源
+            }).then(function (canvas) {
+                const img = new Image();
+                img.src = canvas.toDataURL('image/png');
+                const newWin = window.open();
+                newWin.document.write(img.outerHTML)
+                newWin.document.title = "3D";
+                newWin.document.close();
+            });
+        }, 500)
+
+    })
+</script>
+</html>

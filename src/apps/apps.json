@@ -33,5 +33,10 @@
         "name": "Chrome",
         "src": "https://www.google.com/webhp?igu=1",
         "icon": "src/icons/chrome.svg"
+    },
+    "lottery": {
+        "name": "3D彩卡",
+        "src": "src/apps/LotteryGeneration/LotteryGeneration.html",
+        "icon": "src/icons/lottery.png"
     }
 }

@@ -200,37 +200,32 @@
             html2canvas(document.querySelector('main'), {
                 allowTaint: true // 允许加载跨域资源
             }).then(function (canvas) {
-                //将base64转换为blob
-                function dataURLtoBlob(dataurl) {
-                    let arr = dataurl.split(','),
-                        mime = arr[0].match(/:(.*?);/)[1],
-                        bstr = atob(arr[1]),
-                        n = bstr.length,
-                        u8arr = new Uint8Array(n);
-                    while (n--) {
-                        u8arr[n] = bstr.charCodeAt(n);
-                    }
-                    return new Blob([u8arr], {type: mime});
+                /**
+                 * content base64格式数据
+                 * fileName 文件名
+                 */
+                {
+                    const base64ToBlob = function (code) {
+                        let parts = code.split(';base64,');
+                        let contentType = parts[0].split(':')[1];
+                        let raw = window.atob(parts[1]);
+                        let rawLength = raw.length;
+                        let uInt8Array = new Uint8Array(rawLength);
+                        for (let i = 0; i < rawLength; ++i) {
+                            uInt8Array[i] = raw.charCodeAt(i);
+                        }
+                        return new Blob([uInt8Array], {
+                            type: contentType
+                        });
+                    };
+                    let aLink = document.createElement('a');
+                    let blob = base64ToBlob(canvas.toDataURL('image/png')); //new Blob([content]);
+                    let evt = document.createEvent("HTMLEvents");
+                    evt.initEvent("click", true, true); //initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
+                    aLink.download = '3DLottery.png';
+                    aLink.href = URL.createObjectURL(blob);
+                    aLink.click();
                 }
-
-                //将blob转换为file
-                function blobToFile(theBlob, fileName) {
-                    theBlob.lastModifiedDate = new Date();
-                    theBlob.name = fileName;
-                    return theBlob;
-                }
-
-                //调用
-                const blob = dataURLtoBlob(canvas.toDataURL('image/png'));
-                const file = blobToFile(blob, '3DLottery.png');
-
-                const img = new Image();
-                // img.src = canvas.toDataURL('image/png');
-                img.src = URL.createObjectURL(file);
-                const newWin = window.open();
-                newWin.document.write(img.outerHTML)
-                newWin.document.title = "3D";
-                newWin.document.close();
             });
         }, 500)
 

@@ -200,8 +200,33 @@
             html2canvas(document.querySelector('main'), {
                 allowTaint: true // 允许加载跨域资源
             }).then(function (canvas) {
+                //将base64转换为blob
+                function dataURLtoBlob(dataurl) {
+                    let arr = dataurl.split(','),
+                        mime = arr[0].match(/:(.*?);/)[1],
+                        bstr = atob(arr[1]),
+                        n = bstr.length,
+                        u8arr = new Uint8Array(n);
+                    while (n--) {
+                        u8arr[n] = bstr.charCodeAt(n);
+                    }
+                    return new Blob([u8arr], {type: mime});
+                }
+
+                //将blob转换为file
+                function blobToFile(theBlob, fileName) {
+                    theBlob.lastModifiedDate = new Date();
+                    theBlob.name = fileName;
+                    return theBlob;
+                }
+
+                //调用
+                const blob = dataURLtoBlob(canvas.toDataURL('image/png'));
+                const file = blobToFile(blob, '3DLottery.png');
+
                 const img = new Image();
-                img.src = canvas.toDataURL('image/png');
+                // img.src = canvas.toDataURL('image/png');
+                img.src = URL.createObjectURL(file);
                 const newWin = window.open();
                 newWin.document.write(img.outerHTML)
                 newWin.document.title = "3D";
